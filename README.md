@@ -1,7 +1,7 @@
 # Omen Demo
 Give [Omen](https://github.com/omen-osdev/omen) a try, right inside your browser!
 
-#### Getting Started
+## Getting Started
 
 Set up your Python Virtual Environment:
 ```bash
