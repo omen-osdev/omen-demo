@@ -1,59 +1,73 @@
 .frosted-glass {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    width: 300px;
-    height: 150px;
-    background: rgba(0, 0, 0, 0.603); /* Semi-transparent white */
-    backdrop-filter: blur(10px); /* Frosted glass effect */
-    border-radius: 15px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    padding: 20px;
-    flex-direction: column;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 60vw;
+  height: 50vh;
+  background: rgba(0, 0, 0, 0.603); /* Semi-transparent white */
+  backdrop-filter: blur(10px); /* Frosted glass effect */
+  border-radius: 15px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+.text {
+  font-family: Arial, sans-serif;
+  font-size: 32px;
+  color: white;
+  font-weight: bold;
+}
+
+.frosted-button {
+  font-family: 'Roboto', sans-serif;
+  margin-top: 10px;
+  padding: 24px 30px;
+  font-size: 16px;
+  color: white;
+  background: rgba(255, 255, 255, 0.2); /* Translucent background */
+  border: none;
+  border-radius: 52px;
+  backdrop-filter: blur(5px);
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.frosted-button:hover {
+  background: rgba(255, 255, 255, 0.4); /* Slightly brighter on hover */
+}
+
+.frosted-button:active {
+  background: rgba(255, 255, 255, 0.6); /* Even brighter when clicked */
+}
+
+.frosted-button i {
+  margin-right: 10px; /* Space between icon and text */
+}
+
+.unselectable {
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+@media (max-width: 768px) {
+  .frosted-glass {
+    width: 50vh;
+    height: 75vh;
   }
-  
+
   .text {
-    font-family: Arial, sans-serif;
-    font-size: 24px;
-    color: white;
-    font-weight: bold;
+    font-size: 20px;
   }
-  
+
   .frosted-button {
-    font-family: 'Roboto', sans-serif;
-    margin-top: 10px;
-    padding: 10px 20px;
-    font-size: 16px;
-    color: white;
-    background: rgba(255, 255, 255, 0.2); /* Translucent background */
-    border: none;
-    border-radius: 5px;
-    backdrop-filter: blur(5px);
-    cursor: pointer;
-    transition: background 0.3s ease;
+    font-size: 14px;
   }
-  
-  .frosted-button:hover {
-    background: rgba(255, 255, 255, 0.4); /* Slightly brighter on hover */
-  }
-  
-  .frosted-button:active {
-    background: rgba(255, 255, 255, 0.6); /* Even brighter when clicked */
-  }
-  
-  .frosted-button i {
-    margin-right: 10px; /* Space between icon and text */
-  }
-  
-  .unselectable {
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  
+}
