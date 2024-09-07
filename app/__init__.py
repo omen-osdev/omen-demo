@@ -26,7 +26,7 @@ def create_app(test_config=None):
 
 
     @app.route('/')
-    def hello():
+    def home():
         return render_template("index.html")
 
     return app
