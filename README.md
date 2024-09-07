@@ -6,9 +6,9 @@ Give [Omen](https://github.com/omen-osdev/omen) a try, right inside your browser
 > [!TIP]
 > Optionally, you can use a virtual environment to run the demo. If you don't want to, skip to the next step.
 > Set up your Python Virtual Environment:
-```bash
-python3 -m venv .venv
-``` 
+> ```bash
+> python3 -m venv .venv
+> ``` 
 > Activate it:
 > Linux and MacOS
 ```bash
