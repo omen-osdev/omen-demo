@@ -6,13 +6,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>Omen Demo</title>
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" />
 </head>
 
   <body style="position: fixed; left: 0px; right: 0px; top: 0px; bottom: 0px; overflow: hidden; margin: 0; padding: 0;">
     <canvas id="canvas" style="width: 100%; height: 100%; padding: 0; margin: 0;"></canvas>
 
-    <div class="frosted-glass">
+    <div class="frosted-glass unselectable">
       <p class="text">Omen Live Demo</p>
       <button class="frosted-button"><i class="fas fa-play"></i>Launch Instance</button>
     </div>
@@ -30,10 +31,10 @@
       // init image data with black pixels
       const image = c.createImageData(imgSize, imgSize);
       for (let i = 0; i < image.data.length; i += 4) {
-        image.data[i] = 0; // R
-        image.data[i + 1] = 0; // G
-        image.data[i + 2] = 0; // B
-        image.data[i + 3] = 255; // A
+        image.data[i] = 0;        // R
+        image.data[i + 1] = 0;    // G
+        image.data[i + 2] = 0;    // B
+        image.data[i + 3] = 255;  // A
       }
 
       // size of our height maps
@@ -238,59 +239,5 @@
 
       requestAnimationFrame(tick);
     </script>
-
-    <style>
-      .frosted-glass {
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        width: 300px;
-        height: 150px;
-        background: rgba(0, 0, 0, 0.603); /* Semi-transparent white */
-        backdrop-filter: blur(10px); /* Frosted glass effect */
-        border-radius: 15px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        padding: 20px;
-        flex-direction: column;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        text-align: center;
-      }
-
-      .text {
-        font-family: Arial, sans-serif;
-        font-size: 24px;
-        color: white;
-        font-weight: bold;
-      }
-
-      .frosted-button {
-		font-family: 'Roboto', sans-serif;
-        margin-top: 10px;
-        padding: 10px 20px;
-        font-size: 16px;
-        color: white;
-        background: rgba(255, 255, 255, 0.2); /* Translucent background */
-        border: none;
-        border-radius: 5px;
-        backdrop-filter: blur(5px);
-        cursor: pointer;
-        transition: background 0.3s ease;
-      }
-
-      .frosted-button:hover {
-        background: rgba(255, 255, 255, 0.4); /* Slightly brighter on hover */
-      }
-
-      .frosted-button:active {
-        background: rgba(255, 255, 255, 0.6); /* Even brighter when clicked */
-      }
-
-	  .frosted-button i {
-		margin-right: 10px; /* Space between icon and text */
-	  }
-    </style>
   </body>
 </html>
