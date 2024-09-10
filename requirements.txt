@@ -3,3 +3,4 @@ watchdog
 python-dotenv
 pytest 
 coverage
+Flask-Turnstile
