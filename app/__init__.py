@@ -2,6 +2,9 @@ import os
 
 from flask import Flask, render_template
 
+from app.instance import build_image
+from instance import *
+
 
 def create_app(test_config=None):
     # create and configure the app
@@ -30,3 +33,5 @@ def create_app(test_config=None):
         return render_template("index.html")
 
     return app
+    
+    
