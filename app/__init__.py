@@ -2,12 +2,22 @@ import os
 
 from flask import Flask, render_template
 
-from app.instance import build_image
 from instance import *
 
-
 def create_app(test_config=None):
-    # create and configure the app
+    """
+    
+    Create and configure an instance of the Flask application.
+
+    :param test_config: dict, optional
+        A dictionary containing the configuration for the application.
+        If provided, this configuration will be used instead of the default
+        values.
+    :return: Flask
+        The created Flask application
+    
+    """
+
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_mapping(
         SECRET_KEY=os.environ.get('SECRET_KEY', 'dev'),
@@ -27,6 +37,8 @@ def create_app(test_config=None):
     except OSError:
         pass
 
+    # use test_config here
+
 
     @app.route('/')
     def home():
@@ -34,4 +46,6 @@ def create_app(test_config=None):
 
     return app
     
-    
+if __name__ == '__main__':
+    app = create_app()
+    app.run(debug=True)
