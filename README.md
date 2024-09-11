@@ -14,8 +14,12 @@ Give [Omen](https://github.com/omen-osdev/omen) a try, right inside your browser
 pip install -r requirements.txt
 ```
 
-#### Now run using:
+#### Running in development mode:
 ```bash
-flask --app app run --debug
+cd app
+python app.py
 ```
-
+#### Running in production mode:
+```bash
+TODO
+```
