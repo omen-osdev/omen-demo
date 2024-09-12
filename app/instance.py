@@ -39,14 +39,12 @@ def init_launcher():
     # Makes local copies of the images(bad idea?)
     #TODO: this should really be optimized
     print("Making copies of Omen images...")
-    current_directory = os.getcwd()
-    os.chdir(current_directory + "/img")
+    current_directory = os.getcwd() + "/app"
     for port in available_ports:
         if not os.path.isfile(current_directory + "/img/" + str(port) + ".img"):
             os.system("dd if=omen.img of=" + str(port) + ".img")
         else:
             print("Already exists. Skipping.")
-    os.chdir("../")
 
     client = docker.from_env()
 
