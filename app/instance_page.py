@@ -9,6 +9,7 @@ from werkzeug.security import check_password_hash, generate_password_hash
 
 from .models import InstanceModel
 from .instance import create_instance
+from app import INSTANCE_LIFETIME
 
 bp = Blueprint("instance_page", __name__, url_prefix="/instance")
 
@@ -23,13 +24,10 @@ def launch_instance():
             return "Could not create an instance!"
         instance = InstanceModel(port, int(time.time()))
         session["instance_key"] = instance
-        from app import INSTANCE_LIFETIME
         
         loop = asyncio.new_event_loop()
         asyncio.set_event_loop(loop)
         loop = asyncio.get_event_loop()
         loop.run_in_executor(None, loop.run_until_complete, instance.check_and_shutdown(INSTANCE_LIFETIME * 60))
 
-        return "Welcome! A New Instance Has Been Launched For You!"
-    else:
-        return str(session["instance_key"].port) + " " + str(session["instance_key"].startup_time)
+    return render_template("instance.html", timeout=INSTANCE_LIFETIME*60*1000)
