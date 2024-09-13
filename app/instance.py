@@ -98,6 +98,3 @@ def delete_instance(port):
     container.kill()
     available_ports.append(port)
 
-
-
-
