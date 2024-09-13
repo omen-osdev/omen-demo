@@ -7,7 +7,7 @@ from flask_session import Session
 from cachelib.simple import SimpleCache
 
 
-INSTANCE_LIFETIME = 5 # Lifetime of each instance, in minutes
+INSTANCE_LIFETIME = 1 # Lifetime of each instance, in minutes
 
 
 

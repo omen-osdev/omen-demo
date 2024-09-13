@@ -1,3 +1,4 @@
+import asyncio
 import functools
 import time
 
@@ -20,7 +21,15 @@ def launch_instance():
         port = create_instance()
         if port == -1:
             return "Could not create an instance!"
-        session["instance_key"] = InstanceModel(port, int(time.time()))
+        instance = InstanceModel(port, int(time.time()))
+        session["instance_key"] = instance
+        from app import INSTANCE_LIFETIME
+        
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        loop = asyncio.get_event_loop()
+        loop.run_in_executor(None, loop.run_until_complete, instance.check_and_shutdown(INSTANCE_LIFETIME * 60))
+
         return "Welcome! A New Instance Has Been Launched For You!"
     else:
         return str(session["instance_key"].port) + " " + str(session["instance_key"].startup_time)

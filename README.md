@@ -16,8 +16,7 @@ pip install -r requirements.txt
 
 #### Running in development mode:
 ```bash
-cd app
-python app.py
+flask --app app run --debug --no-reload
 ```
 #### Running in production mode:
 ```bash

@@ -18,7 +18,7 @@ import os
 IMAGE_NAME = "omen/runenv"
 READY = False
 INSTANCE_PORT_NUMBER_BEGIN = 18200
-MAX_INSTANCES = 5
+MAX_INSTANCES = 10
 port_to_container = {}
 available_ports = [x for x in range(INSTANCE_PORT_NUMBER_BEGIN, INSTANCE_PORT_NUMBER_BEGIN + MAX_INSTANCES)]
 
@@ -42,7 +42,7 @@ def init_launcher():
     current_directory = os.getcwd() + "/app"
     for port in available_ports:
         if not os.path.isfile(current_directory + "/img/" + str(port) + ".img"):
-            os.system("dd if=omen.img of=" + str(port) + ".img")
+            os.system("dd if=" + str(current_directory + "/img/omen.img") + " of=" + str(current_directory + "/img/" + str(port)) + ".img")
         else:
             print("Already exists. Skipping.")
 
@@ -53,19 +53,20 @@ def init_launcher():
             print("Docker Image already exists")
         else:
             print("Creating Docker Image")
-            _ = client.images.build(tag=IMAGE_NAME, path=".", dockerfile="Dockerfile.runenv")
+            _ = client.images.build(tag=IMAGE_NAME, path=os.getcwd() + "/app/", dockerfile="Dockerfile.runenv")
         global READY
         READY = True
 
     except docker.errors.APIError:
-        print("Error with Docker API")
+        print("Error with Docker API when trying to create image")
     except docker.errors.BuildError:
         print("Error when building the image")
 
 
+# TODO: fix the directory path of cleanup (careful! don't delete your entire SSD)
 def cleanup_launcher():
     print("Removing all copied Omen images...")
-    current_directory = os.getcwd() + "/img"
+    current_directory = os.getcwd() + "/app/img"
     for filename in os.listdir(current_directory):
         if not filename == "omen.img":
             f = os.path.join(current_directory, filename)
@@ -82,7 +83,7 @@ def create_instance():
 
         new_instance_port = available_ports.pop()
         client = docker.from_env()
-        container = client.containers.run(detach=True, auto_remove=True, devices=["/dev/kvm"], cap_add=["NET_ADMIN"], volumes=["/home/s1nister/omen-demo/app/img/omen.img:/boot.img:rw"], environment=["BOOT_MODE=uefi", "ARGUMENTS=-cpu qemu64 -d cpu_reset -no-reboot -no-shutdown -machine q35 -m 4G"], ports={8006:new_instance_port}, image="omen/runenv")
+        container = client.containers.run(detach=True, auto_remove=True, devices=["/dev/kvm"], cap_add=["NET_ADMIN"], volumes=[os.getcwd() + "/app/img/" + str(new_instance_port) + ".img" + ":/boot.img:rw"], environment=["BOOT_MODE=uefi", "ARGUMENTS=-cpu qemu64 -d cpu_reset -no-reboot -no-shutdown -machine q35 -m 4G"], ports={8006:new_instance_port}, image="omen/runenv")
         port_to_container[new_instance_port] = container
         return new_instance_port
     else:

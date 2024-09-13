@@ -1,5 +1,4 @@
 Flask
-watchdog
 python-dotenv
 pytest 
 coverage
