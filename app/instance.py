@@ -14,6 +14,7 @@
 import docker
 import docker.errors
 import os
+import shutil
 
 IMAGE_NAME = "omen/runenv"
 READY = False
@@ -36,15 +37,16 @@ def docker_image_exists(client):
 
 def init_launcher():
 
-    # Makes local copies of the images(bad idea?)
-    #TODO: this should really be optimized
-    print("Making copies of Omen images...")
-    current_directory = os.getcwd() + "/app"
+    current_directory = os.path.join(os.getcwd(), "app")
+    source_img = os.path.join(current_directory, "img", "omen.img")
     for port in available_ports:
-        if not os.path.isfile(current_directory + "/img/" + str(port) + ".img"):
-            os.system("dd if=" + str(current_directory + "/img/omen.img") + " of=" + str(current_directory + "/img/" + str(port)) + ".img")
+        dest_img = os.path.join(current_directory, "img", f"{port}.img")
+        
+        if not os.path.isfile(dest_img):
+            print(f"Creating image for port {port}...")
+            shutil.copyfile(source_img, dest_img)
         else:
-            print("Already exists. Skipping.")
+            print(f"Image for port {port} already exists. Skipping.")
 
     client = docker.from_env()
 
