@@ -18,7 +18,7 @@ pip install -r requirements.txt
 ```bash
 flask --app app run --debug --no-reload
 ```
-#### Running in production mode:
-```bash
-TODO
-```
+> [!WARNING]
+> Currently the app won't destroy the Docker container after the user closes the tab.</br>
+> To manually stop the container, run:<br/>```docker ps``` to get the container ID,</br>
+> and then ```docker stop <container_id>``` to stop the container.
