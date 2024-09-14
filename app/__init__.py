@@ -55,8 +55,7 @@ def create_app(test_config=None):
     #TODO: Use test_config to set up the app for testing here
 
     from .instance import init_launcher
-    init_launcher()    # Init the instance launcher #? Should this be done here? Maybe an HTTP Method should be used to start the instance
-    # TODO: call cleanup_launcher in some sort of a cleanup function
+    init_launcher()
 
     @app.route('/')
     def home():
@@ -64,7 +63,12 @@ def create_app(test_config=None):
 
     from . import instance_page
     app.register_blueprint(instance_page.bp)
-    
+
+    from .instance import cleanup_launcher
+    @app.teardown_appcontext
+    def cleanup(e):
+        cleanup_launcher()
+
     return app
 
 if __name__ == '__main__':
