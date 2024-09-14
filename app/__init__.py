@@ -1,12 +1,19 @@
 from datetime import timedelta
 from mimetypes import init
 import os
+import signal
 
 from flask import Flask, render_template, session
 from flask_session import Session
 from cachelib.simple import SimpleCache
 
 INSTANCE_LIFETIME = 1 # Lifetime of each instance, in minutes
+
+def handle_shutdown(sig, frame):
+    print("Shutting down...")
+    from .instance import cleanup_launcher
+    cleanup_launcher()
+    exit(0)
 
 def create_app(test_config=None):
     """
@@ -53,6 +60,9 @@ def create_app(test_config=None):
         pass
 
     #TODO: Use test_config to set up the app for testing here
+    
+    signal.signal(signal.SIGINT, handle_shutdown)
+    signal.signal(signal.SIGTERM, handle_shutdown)
 
     from .instance import init_launcher
     init_launcher()
@@ -63,11 +73,6 @@ def create_app(test_config=None):
 
     from . import instance_page
     app.register_blueprint(instance_page.bp)
-
-    from .instance import cleanup_launcher
-    @app.teardown_appcontext
-    def cleanup(e):
-        cleanup_launcher()
 
     return app
 

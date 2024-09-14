@@ -34,21 +34,77 @@ def docker_image_exists(client):
         READY = False
         return False
 
+def cleanup_launcher():
+    print("Removing all copied Omen images...")
+    
+    # Construct the path to the directory
+    current_directory = os.path.join(os.getcwd(), "app", "img")
+    
+    # Check if the directory exists
+    if not os.path.isdir(current_directory):
+        print(f"Directory does not exist: {current_directory}")
+        return
+    
+    # Iterate through all files in the directory
+    for filename in os.listdir(current_directory):
+        file_path = os.path.join(current_directory, filename)
+        
+        # Skip if the file is named 'omen.img'
+        if filename == "omen.img":
+            continue
+        
+        # Check if it's a file and then delete it
+        if os.path.isfile(file_path):
+            print(f"Deleting: {file_path}")
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+        
+        # Even if folder, try to remove it
+        elif os.path.isdir(file_path):
+            print(f"Deleting directory: {file_path}")
+            try:
+                shutil.rmtree(file_path)
+            except Exception as e:
+                print(f"Error deleting directory {file_path}: {e}")
+    
+    print("Cleanup complete.")
 
 def init_launcher():
-
     current_directory = os.path.join(os.getcwd(), "app")
     source_img = os.path.join(current_directory, "img", "omen.img")
-    for port in available_ports:
+    
+    # Check if the source image exists
+    if not os.path.isfile(source_img):
+        print(f"Source image does not exist: {source_img}")
+        return
+    
+    # Create images for each port (example: 8080.img, 8081.img, etc.)
+    for port in range(8080, 8085):  # Example ports
         dest_img = os.path.join(current_directory, "img", f"{port}.img")
         
         if not os.path.isfile(dest_img):
             print(f"Creating image for port {port}...")
-            shutil.copyfile(source_img, dest_img)
+            try:
+                shutil.copyfile(source_img, dest_img)
+            except PermissionError:
+                print(f"Permission error occurred while copying image for port {port}.")
+                cleanup_launcher()
+            except Exception as e:
+                print(f"Error when copying image for port {port}: {e}")
         else:
             print(f"Image for port {port} already exists. Skipping.")
 
-    client = docker.from_env()
+    try:
+        client = docker.from_env()
+    except docker.errors.DockerException:
+        print("Error when trying to connect to Docker, is Docker running?")
+        return
+    except Exception as e:
+        print("Unknown error: " + str(e))
+        return
+
 
     try:
         if docker_image_exists(client):
@@ -65,16 +121,6 @@ def init_launcher():
         print("Error when building the image")
 
 
-# TODO: fix the directory path of cleanup (careful! don't delete your entire SSD)
-def cleanup_launcher():
-    print("Removing all copied Omen images...")
-    current_directory = os.getcwd() + "/app/img"
-    for filename in os.listdir(current_directory):
-        if not filename == "omen.img":
-            f = os.path.join(current_directory, filename)
-            if(os.path.isfile(f)):
-                print("Deleting: " + f)
-                os.remove(f)
 
 
 def create_instance():
