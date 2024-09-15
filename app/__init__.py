@@ -8,11 +8,13 @@ from flask_session import Session
 from cachelib.simple import SimpleCache
 
 INSTANCE_LIFETIME = 1 # Lifetime of each instance, in minutes
+is_debug = False
 
 def handle_shutdown(sig, frame):
     print("Shutting down...")
-    from .instance import cleanup_launcher
-    cleanup_launcher()
+    if is_debug == False:
+        from .instance import cleanup_launcher
+        cleanup_launcher()
     exit(0)
 
 def create_app(test_config=None):
@@ -45,6 +47,9 @@ def create_app(test_config=None):
     # Start server-side sessions
     #TODO: Change to Redis
     Session(app)
+
+    global is_debug
+    is_debug = app.debug
 
     if test_config is None:
         # load the instance config, if it exists, when not testing
