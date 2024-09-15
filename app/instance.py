@@ -72,16 +72,15 @@ def cleanup_launcher():
     print("Cleanup complete.")
 
 def init_launcher():
+
     current_directory = os.path.join(os.getcwd(), "app")
     source_img = os.path.join(current_directory, "img", "omen.img")
     
-    # Check if the source image exists
     if not os.path.isfile(source_img):
         print(f"Source image does not exist: {source_img}")
         return
     
-    # Create images for each port (example: 8080.img, 8081.img, etc.)
-    for port in range(8080, 8085):  # Example ports
+    for port in available_ports: 
         dest_img = os.path.join(current_directory, "img", f"{port}.img")
         
         if not os.path.isfile(dest_img):
