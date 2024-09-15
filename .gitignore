@@ -166,3 +166,7 @@ cython_debug/
 
 # Project Specific .gitignore rules
 
+# Ignore all .img files except omen.img
+*.img
+!omen.img
+
