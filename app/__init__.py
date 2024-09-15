@@ -11,11 +11,15 @@ INSTANCE_LIFETIME = 1 # Lifetime of each instance, in minutes
 is_debug = False
 
 def handle_shutdown(sig, frame):
+
+    from .instance import cleanup_instances
+    cleanup_instances()
+
     print("Shutting down...")
     if is_debug == False:
         from .instance import cleanup_launcher
         cleanup_launcher()
-    exit(0)
+    os._exit(0)
 
 def create_app(test_config=None):
     """
