@@ -18,7 +18,10 @@ pip install -r requirements.txt
 ```bash
 flask --app app run --debug --no-reload
 ```
+
 > [!WARNING]
-> Currently the app won't destroy the Docker container after the user closes the tab.</br>
-> To manually stop the container, run:<br/>```docker ps``` to get the container ID,</br>
-> and then ```docker stop <container_id>``` to stop the container.
+> The app will automatically destroy Docker containers after the set INSTANCE_LIMIT time is reached. However, if the Flask app crashes or is manually stopped (e.g., via Ctrl+C) before that time, the running containers will not be automatically terminated.<br />
+> Closing the browser tab does not stop the container, as the session persists for the duration of `INSTANCE_LIMIT` (e.g., 1 minute).<br />
+> To manually terminate a container, run:<br />
+> ```docker ps``` to get the container ID, then<br />
+> ```docker kill <container_id>```. to immediately stop the container.
