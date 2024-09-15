@@ -19,4 +19,4 @@ class InstanceModel:
                 print("Shutting down container!")
                 delete_instance(self.port)
                 break
-            await asyncio.sleep(60) # Check every 60s
+            await asyncio.sleep(20) # checking time limits 3 times per minute(every 20s) 

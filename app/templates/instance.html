@@ -9,16 +9,16 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" />
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
   <script type="text/javascript">
-    setTimeout(function(){
-      window.location.href = "/";
-    }, {{ timeout }});
+    const timeout = {{ timeout }};
   </script>
+  <script src="{{ url_for('static', filename='timeout.js') }}"></script>
 
 </head>
 
   <body>
     <div>
-        <p1>An instance will be placed here!</p1>
+        <p>An instance will be placed here!</p>
+        <p id="countdown">You are not supposed to be seeing this X_x</p>
     </div>
   </body>
 </html>

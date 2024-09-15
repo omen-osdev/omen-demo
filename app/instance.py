@@ -14,6 +14,7 @@
 import docker
 import docker.errors
 import os
+import shutil
 
 IMAGE_NAME = "omen/runenv"
 READY = False
@@ -33,20 +34,82 @@ def docker_image_exists(client):
         READY = False
         return False
 
+def cleanup_instances():
+    print("Shutting down all instances...")
+    for port, container in port_to_container.items():
+        container.kill()
+
+def cleanup_launcher():
+
+    print("Removing all copied Omen images...")
+    
+    # Construct the path to the directory
+    current_directory = os.path.join(os.getcwd(), "app", "img")
+    
+    # Check if the directory exists
+    if not os.path.isdir(current_directory):
+        print(f"Directory does not exist: {current_directory}")
+        return
+    
+    # Iterate through all files in the directory
+    for filename in os.listdir(current_directory):
+        file_path = os.path.join(current_directory, filename)
+        
+        # Skip if the file is named 'omen.img'
+        if filename == "omen.img":
+            continue
+        
+        # Check if it's a file and then delete it
+        if os.path.isfile(file_path):
+            print(f"Deleting: {file_path}")
+            try:
+                os.remove(file_path)
+            except Exception as e:
+                print(f"Error deleting file {file_path}: {e}")
+        
+        # Even if folder, try to remove it
+        elif os.path.isdir(file_path):
+            print(f"Deleting directory: {file_path}")
+            try:
+                shutil.rmtree(file_path)
+            except Exception as e:
+                print(f"Error deleting directory {file_path}: {e}")
+    
+    print("Cleanup complete.")
 
 def init_launcher():
 
-    # Makes local copies of the images(bad idea?)
-    #TODO: this should really be optimized
-    print("Making copies of Omen images...")
-    current_directory = os.getcwd() + "/app"
-    for port in available_ports:
-        if not os.path.isfile(current_directory + "/img/" + str(port) + ".img"):
-            os.system("dd if=" + str(current_directory + "/img/omen.img") + " of=" + str(current_directory + "/img/" + str(port)) + ".img")
+    current_directory = os.path.join(os.getcwd(), "app")
+    source_img = os.path.join(current_directory, "img", "omen.img")
+    
+    if not os.path.isfile(source_img):
+        print(f"Source image does not exist: {source_img}")
+        return
+    
+    for port in available_ports: 
+        dest_img = os.path.join(current_directory, "img", f"{port}.img")
+        
+        if not os.path.isfile(dest_img):
+            print(f"Creating image for port {port}...")
+            try:
+                shutil.copyfile(source_img, dest_img)
+            except PermissionError:
+                print(f"Permission error occurred while copying image for port {port}.")
+                cleanup_launcher()
+            except Exception as e:
+                print(f"Error when copying image for port {port}: {e}")
         else:
-            print("Already exists. Skipping.")
+            print(f"Image for port {port} already exists. Skipping.")
 
-    client = docker.from_env()
+    try:
+        client = docker.from_env()
+    except docker.errors.DockerException:
+        print("Error when trying to connect to Docker, is Docker running?")
+        return
+    except Exception as e:
+        print("Unknown error: " + str(e))
+        return
+
 
     try:
         if docker_image_exists(client):
@@ -63,28 +126,20 @@ def init_launcher():
         print("Error when building the image")
 
 
-# TODO: fix the directory path of cleanup (careful! don't delete your entire SSD)
-def cleanup_launcher():
-    print("Removing all copied Omen images...")
-    current_directory = os.getcwd() + "/app/img"
-    for filename in os.listdir(current_directory):
-        if not filename == "omen.img":
-            f = os.path.join(current_directory, filename)
-            if(os.path.isfile(f)):
-                print("Deleting: " + f)
-                os.remove(f)
 
 
 def create_instance():
     if READY:
         # Check whether we are able to launch a new instance
         if not available_ports:
+            print("No more available containers!")
             return -1
 
         new_instance_port = available_ports.pop()
         client = docker.from_env()
         container = client.containers.run(detach=True, auto_remove=True, devices=["/dev/kvm"], cap_add=["NET_ADMIN"], volumes=[os.getcwd() + "/app/img/" + str(new_instance_port) + ".img" + ":/boot.img:rw"], environment=["BOOT_MODE=uefi", "ARGUMENTS=-cpu qemu64 -d cpu_reset -no-reboot -no-shutdown -machine q35 -m 4G"], ports={8006:new_instance_port}, image="omen/runenv")
         port_to_container[new_instance_port] = container
+        print("Created a new instance")
         return new_instance_port
     else:
         print("Cannot create containers because image does not exist")
@@ -92,10 +147,7 @@ def create_instance():
 
 
 def delete_instance(port):
-    container = port_to_container[port]
+    container = port_to_container.pop(port, None)
     container.kill()
     available_ports.append(port)
-
-
-
 
