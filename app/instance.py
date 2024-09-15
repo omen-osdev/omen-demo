@@ -34,7 +34,13 @@ def docker_image_exists(client):
         READY = False
         return False
 
+def cleanup_instances():
+    print("Shutting down all instances...")
+    for port, container in port_to_container.items():
+        container.kill()
+
 def cleanup_launcher():
+
     print("Removing all copied Omen images...")
     
     # Construct the path to the directory
@@ -126,12 +132,14 @@ def create_instance():
     if READY:
         # Check whether we are able to launch a new instance
         if not available_ports:
+            print("No more available containers!")
             return -1
 
         new_instance_port = available_ports.pop()
         client = docker.from_env()
         container = client.containers.run(detach=True, auto_remove=True, devices=["/dev/kvm"], cap_add=["NET_ADMIN"], volumes=[os.getcwd() + "/app/img/" + str(new_instance_port) + ".img" + ":/boot.img:rw"], environment=["BOOT_MODE=uefi", "ARGUMENTS=-cpu qemu64 -d cpu_reset -no-reboot -no-shutdown -machine q35 -m 4G"], ports={8006:new_instance_port}, image="omen/runenv")
         port_to_container[new_instance_port] = container
+        print("Created a new instance")
         return new_instance_port
     else:
         print("Cannot create containers because image does not exist")
@@ -139,7 +147,7 @@ def create_instance():
 
 
 def delete_instance(port):
-    container = port_to_container[port]
+    container = port_to_container.pop(port, None)
     container.kill()
     available_ports.append(port)
 
