@@ -9,9 +9,7 @@
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" />
   <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
   <script type="text/javascript">
-    setTimeout(function(){
-      window.location.href = "/";
-    }, {{ timeout }});
+    const timeout = {{ timeout }};
   </script>
 
 </head>
@@ -19,7 +17,7 @@
   <body>
     <div>
         <p>An instance will be placed here!</p>
-        <p>Redirecting in {{ timeout/1000 }} seconds...</p>
+        <p id="countdown"></p>
     </div>
   </body>
 </html>
