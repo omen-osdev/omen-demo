@@ -20,7 +20,8 @@ flask --app app run --debug --no-reload
 ```
 
 > [!WARNING]
-> The app will automatically destroy Docker containers after the set INSTANCE_LIMIT time is reached. However, if the Flask app crashes or is manually stopped (e.g., via Ctrl+C) before that time, the running containers will not be automatically terminated.<br />
+> The app will automatically destroy Docker containers after the set INSTANCE_LIMIT time is reached.<br />
+> However, if the Flask app crashes or is manually stopped (e.g., via Ctrl+C) before that time, the running containers will not be automatically terminated.<br />
 > Closing the browser tab does not stop the container, as the session persists for the duration of `INSTANCE_LIMIT` (e.g., 1 minute).<br />
 > To manually terminate a container, run:<br />
 > ```docker ps``` to get the container ID, then<br />
