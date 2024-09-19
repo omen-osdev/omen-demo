@@ -34,12 +34,12 @@ def launch_instance():
                     instance.check_and_shutdown(INSTANCE_LIFETIME * 60)
             )
 
-        return render_template("instance.html")
+            return render_template("instance.html")
         else:
             return render_template("error.html", error="You already have an instance running, please close it before launching a new one.")
             # TODO:
             # Add a button to close the instance
             # *OR*
             # just redirect to the original instance
-        except Exception as e:
+    except Exception as e:
             return render_template("error.html", error=str(e))
