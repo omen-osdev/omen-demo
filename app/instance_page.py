@@ -21,7 +21,7 @@ def launch_instance():
         port = create_instance()
 
         if port == -1:
-            return "Could not create an instance!"
+            return render_template("error.html", error="Unable to create a new instance")
         instance = InstanceModel(port, int(time.time()))
         session["instance_key"] = instance
         loop = asyncio.new_event_loop()
