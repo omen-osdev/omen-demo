@@ -218,3 +218,8 @@ const tick = (time) => {
 };
 
 requestAnimationFrame(tick);
+
+document.querySelector('.frosted-button').addEventListener('click', function() {
+    window.location.href = './instance/';
+});
+

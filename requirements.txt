@@ -1,6 +1,6 @@
 Flask
-watchdog
 python-dotenv
 pytest 
 coverage
 docker
+Flask-Session[cachelib]

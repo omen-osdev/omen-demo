@@ -16,10 +16,11 @@ pip install -r requirements.txt
 
 #### Running in development mode:
 ```bash
-cd app
-python app.py
+flask --app app run --debug --no-reload
 ```
-#### Running in production mode:
-```bash
-TODO
-```
+
+> [!WARNING]
+> If the Flask app crashes, the running containers will not be automatically terminated.<br />
+> To manually terminate a container, run:<br />
+> ```docker ps``` to get the container ID, then<br />
+> ```docker kill <container_id>```. to immediately stop the container.
