@@ -35,7 +35,7 @@ body {
   text-align: center;
 }
 
-.text {
+h1 {
   font-family: Arial, sans-serif;
   font-size: 32px;
   color: white;
@@ -81,7 +81,7 @@ body {
     height: 75vh;
   }
 
-  .text {
+  h1 {
     font-size: 20px;
   }
 

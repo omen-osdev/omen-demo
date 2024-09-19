@@ -8,11 +8,13 @@
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.12.1/css/all.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap" />
     <link rel="icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='instance.css') }}" />
     <script src="{{ url_for('static', filename='timeout.js') }}"></script>
 </head>
   <body>
     <div>
-        <p>An instance will be placed here!</p>
+        <h1>OMEN Live Demo</h1>
+        <iframe src="http://yonchukku.dev" id="frame" width="100%" height="100%"></iframe>
         <p id="countdown">You are not supposed to be seeing this X_x</p>
     </div>
   </body>
