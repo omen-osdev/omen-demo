@@ -30,4 +30,4 @@ def launch_instance():
         loop = asyncio.get_event_loop()
         loop.run_in_executor(None, loop.run_until_complete, instance.check_and_shutdown(INSTANCE_LIFETIME * 60))
 
-    return render_template("instance.html", timeout=INSTANCE_LIFETIME*60*1000)
+    return render_template("instance.html")
