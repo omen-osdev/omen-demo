@@ -1,8 +1,5 @@
 
-function displayText(text) {
-    const el = document.getElementById('countdown');
-    el.innerHTML = text;
-}
+const el = document.getElementById('countdown');
 
 function startCountdown(time) {
     let remainingTime = time;
@@ -14,7 +11,7 @@ function startCountdown(time) {
             window.location.href = '/'
             return;
         }
-        displayText(`Session will expire in ${remainingTime} seconds`);
+        el.innerHTML = `Session will expire in ${remainingTime} seconds`;
     }, 1000);
 
 function getAliveTime() {
