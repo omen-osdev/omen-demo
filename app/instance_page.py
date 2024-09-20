@@ -35,6 +35,11 @@ def launch_instance():
                     loop.run_until_complete,
                     instance.check_and_shutdown(INSTANCE_LIFETIME * 60)
             )
+
+        # Upon page load, verify whether the user's time has run out or not
+        if int(time.time()) - session["instance_key"].startup_time > INSTANCE_LIFETIME * 60:
+             return redirect("/", code=302)
+
         return render_template("instance.html")
     except Exception as e:
             print(str(e))
