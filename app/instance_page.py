@@ -14,10 +14,12 @@ from app import INSTANCE_LIFETIME
 bp = Blueprint("instance_page", __name__, url_prefix="/instance")
 
 
+
 @bp.route("/", methods=["GET"])
 def launch_instance():
     try:
         if session.get("instance_key", None) is None:
+            print("Creating a new instance")
             current_app.session_interface.regenerate(session)
             port = create_instance()
     
@@ -33,13 +35,7 @@ def launch_instance():
                     loop.run_until_complete,
                     instance.check_and_shutdown(INSTANCE_LIFETIME * 60)
             )
-
-            return render_template("instance.html")
-        else:
-            return render_template("error.html", error="You already have an instance running, please close it before launching a new one.")
-            # TODO:
-            # Add a button to close the instance
-            # *OR*
-            # just redirect to the original instance
+        return render_template("instance.html")
     except Exception as e:
-            return render_template("error.html", error=str(e))
+            print(str(e))
+            return render_template("error.html", error="Unknown error occurred")
