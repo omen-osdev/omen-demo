@@ -16,6 +16,7 @@ function startCountdown(time) {
         }
         displayText(`Session will expire in ${remainingTime} seconds`);
     }, 1000);
+}
 
 function getAliveTime() {
     const url = '/instance/time';
