@@ -7,7 +7,7 @@ from flask import Flask, render_template, session
 from flask_session import Session
 from cachelib.simple import SimpleCache
 
-INSTANCE_LIFETIME = 1 # Lifetime of each instance, in minutes
+INSTANCE_LIFETIME = 1  # Lifetime of each instance, in minutes
 is_debug = False
 
 def handle_shutdown(sig, frame):
@@ -22,8 +22,7 @@ def handle_shutdown(sig, frame):
     os._exit(0)
 
 def create_app(test_config=None):
-    """
-    
+    """ 
     Create and configure an instance of the Flask application.
 
     :param test_config: dict, optional
@@ -49,7 +48,7 @@ def create_app(test_config=None):
     # TODO: Follow before deploying to prod: https://flask-session.readthedocs.io/en/latest/security.html
     # TODO: Consider using flask-talisman: https://github.com/wntrblm/flask-talisman
     # Start server-side sessions
-    #TODO: Change to Redis
+    # TODO: Change to Redis
     Session(app)
 
     global is_debug
@@ -68,8 +67,7 @@ def create_app(test_config=None):
     except OSError:
         pass
 
-    #TODO: Use test_config to set up the app for testing here
-    
+    # TODO: Use test_config to set up the app for testing here 
     signal.signal(signal.SIGINT, handle_shutdown)
     signal.signal(signal.SIGTERM, handle_shutdown)
 
@@ -85,7 +83,7 @@ def create_app(test_config=None):
 
     return app
 
+
 if __name__ == '__main__':
     app = create_app()
     app.run(debug=True)
-
