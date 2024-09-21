@@ -1,5 +1,4 @@
-
-const el = document.getElementById('countdown');
+let el;
 
 function startCountdown(time) {
     let remainingTime = time;
@@ -7,7 +6,7 @@ function startCountdown(time) {
         remainingTime -= 1;
         if (remainingTime <= 0) {
             clearInterval(interval);
-            displayText('Session expired');
+            el.innerHTML = "Session Expired!"
             window.location.href = '/'
             return;
         }
@@ -20,7 +19,7 @@ function getAliveTime() {
     fetch(url)
             .then(response => {
                 if (response.status === 403) {
-                    el.innerHTML = 'Unavailable session, maybe it expired?';
+                    el.innerHTML = 'Unavailable session, maybe it is expired?';
                     return;
                 }
                 if (!response.ok) {
@@ -41,4 +40,9 @@ function getAliveTime() {
             });
 }
 
-window.onload = getAliveTime();
+
+// Ensuring the DOM is fully loaded before calling getAliveTime
+document.addEventListener('DOMContentLoaded', function () {
+    el = document.getElementById('countdown');
+    getAliveTime();
+});
